@@ -36,17 +36,16 @@ export default class Index extends Component {
 
     render() {
         return (
-/*            <Navigator
-                ref="navigator"
-                style={{flex:1}}
-                initialRoute={{name:'Splash',component:Splash}}
-                renderScene={this.renderScene}
-                configureScene={(route) => {
-                return Navigator.SceneConfigs.PushFromRight;
-              }}>
-            </Navigator>*/
+            /*            <Navigator
+             ref="navigator"
+             style={{flex:1}}
+             initialRoute={{name:'Splash',component:Splash}}
+             renderScene={this.renderScene}
+             configureScene={(route) => {
+             return Navigator.SceneConfigs.PushFromRight;
+             }}>
+             </Navigator>*/
             <Main/>
         )
     }
 }
-
