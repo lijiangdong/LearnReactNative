@@ -5,7 +5,7 @@
 import React,{Component} from 'react';
 import {View, Text} from 'react-native';
 
-export default class Home extends Component{
+export default class Center extends Component{
     constructor(props){
         super(props)
     }

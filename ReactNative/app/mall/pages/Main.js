@@ -28,7 +28,7 @@ export default class Main extends Component{
                     selectedTitleStyle={styles.selectedTextStyle}
                     titleStyle={styles.textStyle}
                     onPress={() => this.setState({ selectedTab: 'home' })}>
-                    <Home {...this.props}></Home>
+                    <Home {...this.props}/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                     selected={this.state.selectedTab === 'order'}
@@ -38,7 +38,7 @@ export default class Main extends Component{
                     selectedTitleStyle={styles.selectedTextStyle}
                     titleStyle={styles.textStyle}
                     onPress={() => this.setState({ selectedTab: 'order' })}>
-                    <Order {...this.props}></Order>
+                    <Order {...this.props}/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                     selected={this.state.selectedTab === 'cart'}
