@@ -9,22 +9,19 @@
 
 package com.facebook.react.bridge;
 
-import javax.annotation.Nullable;
-
-import java.lang.ref.WeakReference;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.queue.MessageQueueThread;
 import com.facebook.react.bridge.queue.ReactQueueConfiguration;
 import com.facebook.react.common.LifecycleState;
+import java.lang.ref.WeakReference;
+import java.util.concurrent.CopyOnWriteArraySet;
+import javax.annotation.Nullable;
 
 /**
  * Abstract ContextWrapper for Android application or activity {@link Context} and
@@ -105,15 +102,6 @@ public class ReactContext extends ContextWrapper {
     return mCatalystInstance.getJSModule(jsInterface);
   }
 
-  public <T extends JavaScriptModule> T getJSModule(
-    ExecutorToken executorToken,
-    Class<T> jsInterface) {
-    if (mCatalystInstance == null) {
-      throw new RuntimeException(EARLY_JS_ACCESS_EXCEPTION_MESSAGE);
-    }
-    return mCatalystInstance.getJSModule(executorToken, jsInterface);
-  }
-
   public <T extends NativeModule> boolean hasNativeModule(Class<T> nativeModuleInterface) {
     if (mCatalystInstance == null) {
       throw new RuntimeException(
@@ -153,16 +141,20 @@ public class ReactContext extends ContextWrapper {
         case BEFORE_RESUME:
           break;
         case RESUMED:
-          runOnUiQueueThread(new Runnable() {
-            @Override
-            public void run() {
-              try {
-                listener.onHostResume();
-              } catch (RuntimeException e) {
-                handleException(e);
-              }
-            }
-          });
+          runOnUiQueueThread(
+              new Runnable() {
+                @Override
+                public void run() {
+                  if (!mLifecycleEventListeners.contains(listener)) {
+                    return;
+                  }
+                  try {
+                    listener.onHostResume();
+                  } catch (RuntimeException e) {
+                    handleException(e);
+                  }
+                }
+              });
           break;
         default:
           throw new RuntimeException("Unhandled lifecycle state.");
@@ -186,9 +178,9 @@ public class ReactContext extends ContextWrapper {
    * Should be called by the hosting Fragment in {@link Fragment#onResume}
    */
   public void onHostResume(@Nullable Activity activity) {
-    UiThreadUtil.assertOnUiThread();
     mLifecycleState = LifecycleState.RESUMED;
     mCurrentActivity = new WeakReference(activity);
+    ReactMarker.logMarker(ReactMarkerConstants.ON_HOST_RESUME_START);
     for (LifecycleEventListener listener : mLifecycleEventListeners) {
       try {
         listener.onHostResume();
@@ -196,6 +188,7 @@ public class ReactContext extends ContextWrapper {
         handleException(e);
       }
     }
+    ReactMarker.logMarker(ReactMarkerConstants.ON_HOST_RESUME_END);
   }
 
   public void onNewIntent(@Nullable Activity activity, Intent intent) {
@@ -214,8 +207,8 @@ public class ReactContext extends ContextWrapper {
    * Should be called by the hosting Fragment in {@link Fragment#onPause}
    */
   public void onHostPause() {
-    UiThreadUtil.assertOnUiThread();
     mLifecycleState = LifecycleState.BEFORE_RESUME;
+    ReactMarker.logMarker(ReactMarkerConstants.ON_HOST_PAUSE_START);
     for (LifecycleEventListener listener : mLifecycleEventListeners) {
       try {
         listener.onHostPause();
@@ -223,6 +216,7 @@ public class ReactContext extends ContextWrapper {
         handleException(e);
       }
     }
+    ReactMarker.logMarker(ReactMarkerConstants.ON_HOST_PAUSE_END);
   }
 
   /**
@@ -279,6 +273,10 @@ public class ReactContext extends ContextWrapper {
 
   public void assertOnNativeModulesQueueThread() {
     Assertions.assertNotNull(mNativeModulesMessageQueueThread).assertIsOnThread();
+  }
+
+  public void assertOnNativeModulesQueueThread(String message) {
+    Assertions.assertNotNull(mNativeModulesMessageQueueThread).assertIsOnThread(message);
   }
 
   public boolean isOnNativeModulesQueueThread() {
@@ -345,9 +343,12 @@ public class ReactContext extends ContextWrapper {
   }
 
   /**
-   * Get the C pointer (as a long) to the JavaScriptCore context associated with this instance.
+   * Get the C pointer (as a long) to the JavaScriptCore context associated with this instance. Use
+   * the following pattern to ensure that the JS context is not cleared while you are using it:
+   * JavaScriptContextHolder jsContext = reactContext.getJavaScriptContextHolder()
+   * synchronized(jsContext) { nativeThingNeedingJsContext(jsContext.get()); }
    */
-  public long getJavaScriptContext() {
-    return mCatalystInstance.getJavaScriptContext();
+  public JavaScriptContextHolder getJavaScriptContextHolder() {
+    return mCatalystInstance.getJavaScriptContextHolder();
   }
 }
