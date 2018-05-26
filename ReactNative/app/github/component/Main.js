@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import TabNavigator from "react-native-tab-navigator";
 import Home from "./Home";
-import Battle from "./Battle";
+import Battle from "./battle/Battle";
 import Popular from "./Popular";
 
 export default class Main extends Component {
