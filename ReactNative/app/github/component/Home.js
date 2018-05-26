@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
-import {View,Text} from "react-native";
+import React, { Component } from 'react';
+import { View, Text } from "react-native";
 
 export default class Home extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
     }
     render() {
         return (
             <View>
+            
                 <Text>Home</Text>
             </View>
         )
     }
-
 }
