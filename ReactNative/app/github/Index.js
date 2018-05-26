@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
-import {Text} from "react-native";
+import React, {
+    Component
+} from 'react';
+import Main from "./component/Main";
 
 export default class Index extends Component {
-
     render() {
         return (
-            <Text>
-                Hello
-            </Text>
+            <Main/>
         )
     }
+
 }
