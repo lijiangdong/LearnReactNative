@@ -1,8 +1,13 @@
-import React,{ Component } from 'react';
+import React, {Component} from 'react';
+import {Text} from "react-native";
 
-default class Index extends Component{
+export default class Index extends Component {
 
-     render(){
-
-     }
+    render() {
+        return (
+            <Text>
+                Hello
+            </Text>
+        )
+    }
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import Index from './mall/Index'
+import Index from './github/Index';
 export default class LearnReactNative extends Component {
+
 
     render() {
         return (
