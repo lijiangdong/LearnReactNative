@@ -58,6 +58,7 @@ export default class Main extends Component {
         )
     }
 }
+
 const styles = StyleSheet.create({
     iconStyle: {
         width: 20,
