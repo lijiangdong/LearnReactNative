@@ -10,6 +10,31 @@ import {
 } from "react-native";
 
 export default class Battle extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            "username": ""
+        }
+    }
+
+    getUserData(username) {
+        let url = 'https://api.github.com/users/' + username;
+        console.log(url);
+        fetch('https://api.github.com/users/' + username)
+            .then((response) => {
+                let data = response.json();
+                console.log(data);
+                return data;
+            })
+            .then((responseData) => {
+                alert(responseData.id)
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     render() {
         return (
             <View style={{flex: 1}}>
@@ -27,13 +52,16 @@ export default class Battle extends Component {
                 }}
                            underlineColorAndroid="transparent"
                            placeholderTextColor="gray"
-                           placeholder="github username">
-                </TextInput>
+                           placeholder="github username"
+                           onChangeText={(text) => {
+                               this.state.username = text;
+                           }}
+                />
                 <View style={{
-                    marginTop:30,
-                    alignSelf:'center',
-                    width:200,
-                    height:40
+                    marginTop: 30,
+                    alignSelf: 'center',
+                    width: 200,
+                    height: 40
                 }}>
                     <Button style={{
                         alignSelf: 'center',
@@ -43,6 +71,7 @@ export default class Battle extends Component {
                             color="#000000"
                             title='Submit'
                             onPress={() => {
+                                this.getUserData(this.state.username)
                             }}/>
                 </View>
 
@@ -63,10 +92,10 @@ export default class Battle extends Component {
                            placeholder="github username">
                 </TextInput>
                 <View style={{
-                    marginTop:30,
-                    alignSelf:'center',
-                    width:200,
-                    height:40
+                    marginTop: 30,
+                    alignSelf: 'center',
+                    width: 200,
+                    height: 40
                 }}>
                     <Button style={{
                         alignSelf: 'center',
