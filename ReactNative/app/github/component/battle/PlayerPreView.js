@@ -7,15 +7,16 @@ export default class PlayerPreView extends Component{
     }
 
     render(){
+
         return (
             <View>
                 <View>
                     <Image
                         style={{height:100,width:100,alignSelf:'center'}}
-                        source = {{uri:"https://avatars2.githubusercontent.com/u/17037486?v=4"}}/>
+                        source = {{uri:this.props.UserInfo.profile.avatar_url}}/>
                     <Text
                         style = {{fontSize:15,alignSelf:'center',textColor:'#000000'}}>
-                        @lijiangdong
+                        @{this.props.UserInfo.profile.login}
                     </Text>
                     <Text style = {{alignSelf:"center",marginTop:5,color:'red'}}>reset</Text>
                 </View>

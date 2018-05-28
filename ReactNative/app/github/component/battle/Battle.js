@@ -9,55 +9,32 @@ export default class Battle extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            UserInfo: null
+        }
+    }
 
+    handleChange(userInfo){
+        this.setState({
+            UserInfo:userInfo
+        })
     }
 
     render() {
-        return (
-            <PlayerInputPage/>
-        )
-    }
+        let view = null;
+        if (this.state.UserInfo) {
+            view = <View style={{marginTop: 60}}><PlayerPreView UserInfo={this.state.UserInfo}/></View>
+        } else {
 
-}
-
-class PlayerInputPage extends Component{
-    constructor(props) {
-        super(props);
-
-    }
-
-    render(){
-        return(
-            <View style={{marginTop: 60}}>
-                <View>
-                    <PlayerInput/>
-                </View>
-                <View  style={{marginTop: 30}}>
-                    <PlayerInput/>
-                </View>
+            view = <View style={{marginTop: 60}}><PlayerInput test={(userInfo => {
+                this.handleChange(userInfo)
+            })}/>
             </View>
-        )
-    }
-}
 
-class PlayerPrePage extends Component {
-
-    constructor(props) {
-        super(props);
+        }
+        return (view)
 
     }
 
-    render() {
-        return (
-            <View style={{marginTop: 60}}>
-                <View>
-                    <PlayerPreView/>
-                </View>
-                <View  style={{marginTop: 30}}>
-                    <PlayerPreView/>
-                </View>
-            </View>
-        )
-    }
 }
 

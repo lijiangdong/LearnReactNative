@@ -18,29 +18,61 @@ function getProfile(username) {
         })
 }
 
-function getRepos(username){
+function getRepos(username) {
     let url = 'https://api.github.com/users/' + username + '/repos' + params + '&per_page=100';
     console.log(url);
     fetch(url)
-        .then((response)=>{
+        .then((response) => {
             return response.json();
         })
-        .then((responseJson)=>{
+        .then((responseJson) => {
         })
-        .catch((error)=>{
+        .catch((error) => {
         })
 }
 
-function getUserInfo(username) {
+function getUserInfo(username, callback) {
 
-    Promise.all(getProfile(username),getRepos(username))
-        .then((results)=>{
-            alert(results[0])
+    let profileUrl = 'https://api.github.com/users/' + username;
+    let reposUrl = 'https://api.github.com/users/' + username + '/repos' + params + '&per_page=100';
+    let urls = [profileUrl, reposUrl];
+
+    Promise.all(urls.map(fetch))
+        .then(response => {
+            return Promise.all(response.map(res => res.json()))
         })
-        .catch((error)=>{
-            alert(error)
+        .then(texts => {
+            // let profile = texts[0];
+            let repos = texts[1];
+            alert(texts[0].login);
+            callback({
+                profile: {
+                    login: "lijiangdong",
+                    avatar_url: "https://avatars2.githubusercontent.com/u/17037486?v=4"
+                },
+                score: 90
+            })
+        })
+        .catch((error) => {
+            alert(error);
+            console.log(error)
         })
 
 
 }
-module.exports = {getRepos,getProfile,getUserInfo}
+
+function calculateScore(profile, repos) {
+    let followers = profile.followers;
+    let totalStars = getStarCount(repos);
+
+    return (followers * 3) + totalStars;
+}
+
+function getStarCount(repos) {
+    return repos.reduce(function (count, repo) {
+        return count + repo.stargazers_count
+    }, 0);
+}
+
+
+module.exports = {getRepos, getProfile, getUserInfo}
