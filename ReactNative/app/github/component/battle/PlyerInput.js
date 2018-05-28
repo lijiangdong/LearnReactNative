@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Button, Text, TextInput, View} from "react-native";
-import {getRepos} from "../../Utils";
+import {getRepos, getUserInfo} from "../../Utils";
 
 export default class PlayerInput extends Component {
 
@@ -47,7 +47,7 @@ export default class PlayerInput extends Component {
                             color="#000000"
                             title='Submit'
                             onPress={() => {
-                                getRepos(this.state.username);
+                                getUserInfo(this.state.username);
                             }}/>
                 </View>
             </View>

@@ -13,10 +13,8 @@ function getProfile(username) {
             return data;
         })
         .then((responseData) => {
-            alert(responseData.id)
         })
         .catch((error) => {
-            alert(error)
         })
 }
 
@@ -28,18 +26,21 @@ function getRepos(username){
             return response.json();
         })
         .then((responseJson)=>{
-            console.log(responseJson);
-            alert(responseJson[0].id)
         })
         .catch((error)=>{
-            alert(error)
         })
 }
 
 function getUserInfo(username) {
-    return async (username)=>{
 
-    }
+    Promise.all(getProfile(username),getRepos(username))
+        .then((results)=>{
+            alert(results[0])
+        })
+        .catch((error)=>{
+            alert(error)
+        })
+
 
 }
-module.exports = {getRepos,getProfile}
+module.exports = {getRepos,getProfile,getUserInfo}
