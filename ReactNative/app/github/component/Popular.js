@@ -9,5 +9,4 @@ export default class Popular extends Component {
             </View>
         )
     }
-
 }
