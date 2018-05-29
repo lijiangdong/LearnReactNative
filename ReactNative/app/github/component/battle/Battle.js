@@ -2,7 +2,7 @@ import React, {
     Component
 } from 'react';
 import PlayerPreView from "./PlayerPreView";
-import {View} from "react-native";
+import {Text, TouchableOpacity, View} from "react-native";
 import PlayerInput from "./PlyerInput";
 
 export default class Battle extends Component {
@@ -10,29 +10,78 @@ export default class Battle extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            UserInfo: null
+            playerOne: null,
+            playerTwo: null
         }
     }
 
-    handleChange(userInfo){
+    handlePlayerOneChange(userInfo) {
         this.setState({
-            UserInfo:userInfo
+            playerOne: userInfo
+        })
+    }
+
+    handlePlayerTwoChange(userInfo) {
+        this.setState({
+            playerTwo: userInfo
         })
     }
 
     render() {
-        let view = null;
-        if (this.state.UserInfo) {
-            view = <View style={{marginTop: 60}}><PlayerPreView UserInfo={this.state.UserInfo}/></View>
+        let playerOneView = null;
+        let playerTwoView = null;
+        if (this.state.playerOne) {
+            playerOneView = <PlayerPreView
+                UserInfo={this.state.playerOne}
+                resetPlayer={() => {
+                    this.handlePlayerOneChange(null)
+                }}
+            />
         } else {
+            playerOneView = <PlayerInput
+                onClickSubmit={(userInfo => {
+                    this.handlePlayerOneChange(userInfo)
+                })}
+                title="PlayerOne"
+            />
+        }
+        if (this.state.playerTwo) {
+            playerTwoView = <PlayerPreView UserInfo={this.state.playerTwo}/>
+        } else {
+            playerTwoView = <PlayerInput
+                onClickSubmit={userInfo => {
+                    this.handlePlayerTwoChange(userInfo)
+                }}
+                title="PlayerTwo"/>
+        }
 
-            view = <View style={{marginTop: 60}}><PlayerInput test={(userInfo => {
-                this.handleChange(userInfo)
-            })}/>
+        let battleButton = null;
+        if (this.state.playerOne && this.state.playerTwo){
+            battleButton = <TouchableOpacity style={{
+                alignSelf: "center",
+                backgroundColor: "black",
+                width: 100,
+                height: 30,
+                borderRadius: 4,
+                justifyContent: 'center'
+            }}>
+                <Text style={{
+                    textAlign: 'center',
+                    color: "white",
+                }}>Battle</Text>
+            </TouchableOpacity>
+        }
+
+        return (
+            <View>
+                <View style={{marginTop: 60}}>{playerOneView}</View>
+
+                <View style={{marginTop: 30}}>{playerTwoView}</View>
+
+                <View style={{marginTop: 40}}>{battleButton}</View>
             </View>
 
-        }
-        return (view)
+        )
 
     }
 

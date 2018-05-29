@@ -42,23 +42,16 @@ function getUserInfo(username, callback) {
             return Promise.all(response.map(res => res.json()))
         })
         .then(texts => {
-            // let profile = texts[0];
+            let profile = texts[0];
             let repos = texts[1];
-            alert(texts[0].login);
             callback({
-                profile: {
-                    login: "lijiangdong",
-                    avatar_url: "https://avatars2.githubusercontent.com/u/17037486?v=4"
-                },
-                score: 90
+                profile: profile,
+                score: calculateScore(profile,repos)
             })
         })
         .catch((error) => {
-            alert(error);
             console.log(error)
         })
-
-
 }
 
 function calculateScore(profile, repos) {

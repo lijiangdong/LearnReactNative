@@ -15,7 +15,7 @@ export default class PlayerInput extends Component {
         return (
             <View>
                 <Text style={{alignSelf: 'center', fontSize: 20}}>
-                    Player One
+                    {this.props.title}
                 </Text>
                 <TextInput style={{
                     height: 40,
@@ -48,7 +48,7 @@ export default class PlayerInput extends Component {
                             title='Submit'
                             onPress={() => {
                                 getUserInfo(this.state.username,userInfo => {
-                                    this.props.test(userInfo)
+                                    this.props.onClickSubmit(userInfo)
                                 });
                             }}/>
                 </View>
