@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sat Jun 16 12:06:27 CST 2018
+#Sat Jun 16 15:48:58 CST 2018
 17.baseType=DIRECTORY
 4.path=lib/x86/libyoga.so
 25.base=/home/lijiangdong/Documents/study/react-native/LearnReactNative/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
